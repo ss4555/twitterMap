@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization"></script>
+    <script>
+    var map, pointarray, heatmap;
+	var set_gradient = [
+			'rgba(50, 205, 50, 0)',
+			'rgba(50, 205, 50, 1)',
+
+			'rgba(0, 255, 0, 0.5)',
+			'rgba(0, 255, 0, 1)',
+
+			'rgba(127, 255, 0, 0.5)',
+			'rgba(127, 255, 0, 1)',
+
+			'rgba(154, 205, 50, 0.5)',
+			'rgba(154, 205, 50, 1)',
+
+			'rgba(255, 165, 0, 0.5)',
+			'rgba(255, 165, 0, 1)',
+
+			'rgba(255, 0, 0, 1)',
+			'rgba(255, 0, 0, 1)'
+
+	];
+
+//var image = '/static/purple.png';
+var show_markers = false;
+var markers = [];
+var points = [
+
+{% for latlng in latlngs %}
+	new google.maps.LatLng({{latlng.0}}, {{latlng.1}}),
+{% endfor %}
+  // just insert all the coordinates here ~~~~~~~~~~~~~~~
+  //  new google.maps.LatLng(38.753837, -90),
+  //  new google.maps.LatLng(37.752986, -122.403112),
+  //  new google.maps.LatLng(39.751266, -90)
+
+];
+
+//generate markers array for markers map
+for (var j = 0; j < points.length; j++) {
+  var marker = new google.maps.Marker({
+      position: points[j],
+      map: map
+      //icon: image
+  });
+  markers.push(marker);
+}
+
+function initialize() {
+  var mapOptions = {
+    zoom: 2,
+    center: new google.maps.LatLng(37, -10),
+//    mapTypeId: google.maps.MapTypeId.Map
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+//generate ponits array for heatmap
+	// var pointArray = new google.maps.MVCArray(points);
+  heatmap = new google.maps.visualization.HeatmapLayer({
+		data: points
+	});
+  
+//heatmap.setMap(map);
+	toggleHeatmap();
+	// setAllMap(map);
+
+	// set heatmap gradient
+	heatmap.set('gradient', set_gradient);
+
+}
+
+//functions for heatmap
+function toggleHeatmap() {
+	// clear markers
+	setAllMap(null);
+	// show heatmap
+	// heatmap.setMap(heatmap.getMap() ? null : map);
+	heatmap.setMap(map);
+
+}
+
+function changeGradient() {
+	heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+}
+
+//function changeRadius() {
+//	heatmap.set('radius', heatmap.get('radius') ? null : 10);
+//}
+
+//function changeOpacity() {
+//	heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+//}
+
+// functions for markers
+function setAllMap(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+  show_markers = true;
+}
+
+function clearMarkers() {
+  setAllMap(null);
+}
+
+function showMarkers() {
+	//clear heatmap
+    heatmap.setMap(null);
+
+	// show markers
+  	setAllMap(map);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+showMarkers()
+    </script>
+  </head>
+  <body>
+  <div id="panel">
+
+	
+<button onclick="toggleHeatmap()">Show Heatmap</button>
+	<button onclick="showMarkers();">Show Markers</button>
+
+</div>
+  
+    <div id="map-canvas"></div>
+      </body>
+</html>
