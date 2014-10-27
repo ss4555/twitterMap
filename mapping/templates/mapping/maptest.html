@@ -2,8 +2,15 @@
 <html>
   <head>
     <title>Simple Map</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-with, initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">    
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <style>
       html, body, #map-canvas {
         height: 100%;
@@ -39,7 +46,7 @@
 //var image = '/static/purple.png';
 var show_markers = false;
 var markers = [];
-var points = [
+var tweets = [
 
 {% for latlng in latlngs %}
 	new google.maps.LatLng({{latlng.0}}, {{latlng.1}}),
@@ -50,11 +57,10 @@ var points = [
   //  new google.maps.LatLng(39.751266, -90)
 
 ];
-
 //generate markers array for markers map
-for (var j = 0; j < points.length; j++) {
+for (var j = 0; j < tweets.length; j++) {
   var marker = new google.maps.Marker({
-      position: points[j],
+      position: tweets[j],
       map: map
       //icon: image
   });
@@ -70,14 +76,14 @@ function initialize() {
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
 //generate ponits array for heatmap
-	// var pointArray = new google.maps.MVCArray(points);
+	// var pointArray = new google.maps.MVCArray(tweets);
   heatmap = new google.maps.visualization.HeatmapLayer({
-		data: points
+		data: tweets
 	});
   
 //heatmap.setMap(map);
-	toggleHeatmap();
-	// setAllMap(map);
+	showHeatMap();
+	// setMarkers(map);
 
 	// set heatmap gradient
 	heatmap.set('gradient', set_gradient);
@@ -85,9 +91,9 @@ function initialize() {
 }
 
 //functions for heatmap
-function toggleHeatmap() {
+function showHeatMap() {
 	// clear markers
-	setAllMap(null);
+	setMarkers(null);
 	// show heatmap
 	// heatmap.setMap(heatmap.getMap() ? null : map);
 	heatmap.setMap(map);
@@ -107,7 +113,7 @@ function changeGradient() {
 //}
 
 // functions for markers
-function setAllMap(map) {
+function setMarkers(map) {
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(map);
   }
@@ -115,7 +121,7 @@ function setAllMap(map) {
 }
 
 function clearMarkers() {
-  setAllMap(null);
+  setMarkers(null);
 }
 
 function showMarkers() {
@@ -123,7 +129,7 @@ function showMarkers() {
     heatmap.setMap(null);
 
 	// show markers
-  	setAllMap(map);
+  	setMarkers(map);
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -131,14 +137,47 @@ showMarkers()
     </script>
   </head>
   <body>
-  <div id="panel">
-
-	
-<button onclick="toggleHeatmap()">Show Heatmap</button>
-	<button onclick="showMarkers();">Show Markers</button>
+  <div class = "navbar navbar-inverse navbar-static-top">
+  	<div class = "container">
+  	
+  		<a href = "#" class = "navbar-brand">TweetMap</a>
+  		
+  		<button class = "navbar-toggle" data-toggle = "collapse" data-target = ".navHeaderCollapse">
+  			<span class = "icon-bar"></span>
+  			<span class = "icon-bar"></span>
+  			<span class = "icon-bar"></span>  			  			
+  		</button>
+  		
+  		<div class = "collapse navbar-collapse navHeaderCollapse">
+  			
+  			<ul class = "nav navbar-nav navbar-right">
+  				<li><a href = "#" onclick="showMarkers()">Marked Map</a></li>
+  				<li><a href = "#" onclick="showHeatMap()">Color Gradient Map</a></li>
+  				<!-- <li><a href = "#">Key Words/All</a></li> -->
+  				<li class = "dropdown">
+  					<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">Key Word <b class = "caret"></b></a>
+  					<ul class = "dropdown-menu">
+  						<li><a href = "#">London</a></li>
+  						
+  					</ul>
+  				</li>
+  				
+  				<li><a href = "#">Timeline</a></li>
+  				
+  			</ul>
+  		
+  		</div>
+  		
+  </div>
+  </div>
+  <script src = "http:ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ 
+ <!-- <div id="panel">
+    <button onclick="showHeatMap()">Show Heatmap</button>
+	<button onclick="showMarkers()">Show Markers</button>
 
 </div>
-  
+-->  
     <div id="map-canvas"></div>
       </body>
 </html>
