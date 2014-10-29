@@ -41,7 +41,7 @@
 
 	];
 
-//var image = '/static/purple.png';
+var image = '/static/Twitter.png';
 var show_markers = false;
 var markers = [];
 var tweets = [
@@ -56,7 +56,7 @@ for (var j = 0; j < tweets.length; j++) {
   var marker = new google.maps.Marker({
       position: tweets[j],
       map: map
-      //icon: image
+      icon: image
   });
   markers.push(marker);
 }
