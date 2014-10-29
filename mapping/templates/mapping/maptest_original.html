@@ -24,20 +24,23 @@
     <script>
     var map, pointarray, heatmap;
 	var set_gradient = [
-'rgba(0, 255, 255, 0)',
-'rgba(0, 255, 255, 1)',
-'rgba(0, 191, 255, 1)',
-'rgba(0, 127, 255, 1)',
-'rgba(0, 63, 255, 1)',
-'rgba(0, 0, 255, 1)',
-'rgba(0, 0, 223, 1)',
-'rgba(0, 0, 191, 1)',
-'rgba(0, 0, 159, 1)',
-'rgba(0, 0, 127, 1)',
-'rgba(63, 0, 91, 1)',
-'rgba(127, 0, 63, 1)',
-'rgba(191, 0, 31, 1)',
-'rgba(255, 0, 0, 1)'
+			'rgba(50, 205, 50, 0)',
+			'rgba(50, 205, 50, 1)',
+
+			'rgba(0, 255, 0, 0.5)',
+			'rgba(0, 255, 0, 1)',
+
+			'rgba(127, 255, 0, 0.5)',
+			'rgba(127, 255, 0, 1)',
+
+			'rgba(154, 205, 50, 0.5)',
+			'rgba(154, 205, 50, 1)',
+
+			'rgba(255, 165, 0, 0.5)',
+			'rgba(255, 165, 0, 1)',
+
+			'rgba(255, 0, 0, 1)',
+			'rgba(255, 0, 0, 1)'
 
 	];
 
@@ -50,6 +53,10 @@ var tweets = [
 	new google.maps.LatLng({{latlng.0}}, {{latlng.1}}),
 {% endfor %}
   // just insert all the coordinates here ~~~~~~~~~~~~~~~
+  //  new google.maps.LatLng(38.753837, -90),
+  //  new google.maps.LatLng(37.752986, -122.403112),
+  //  new google.maps.LatLng(39.751266, -90)
+
 ];
 //generate markers array for markers map
 for (var j = 0; j < tweets.length; j++) {
@@ -64,26 +71,23 @@ for (var j = 0; j < tweets.length; j++) {
 function initialize() {
   var mapOptions = {
     zoom: 2,
-    center: new google.maps.LatLng(37, -10)
+    center: new google.maps.LatLng(37, -10),
+//    mapTypeId: google.maps.MapTypeId.Map
   };
   map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
-
-  var pointArray = new google.maps.MVCArray(tweets);
+//generate ponits array for heatmap
+	// var pointArray = new google.maps.MVCArray(tweets);
   heatmap = new google.maps.visualization.HeatmapLayer({
-		data: pointArray,
-		dissipating: true,
-		radius: 10,
-		enabled: true,  maxIntensity: 2
-
+		data: tweets
 	});
   
-heatmap.setMap(map);
-//	showHeatMap();
+//heatmap.setMap(map);
+	showHeatMap();
 	// setMarkers(map);
 
 	// set heatmap gradient
-	//heatmap.set('gradient', set_gradient);
+	heatmap.set('gradient', set_gradient);
 
 }
 
@@ -92,10 +96,22 @@ function showHeatMap() {
 	// clear markers
 	setMarkers(null);
 	// show heatmap
-	//heatmap.setMap(heatmap.getMap() ? null : map);
+	// heatmap.setMap(heatmap.getMap() ? null : map);
 	heatmap.setMap(map);
 
 }
+
+function changeGradient() {
+	heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+}
+
+//function changeRadius() {
+//	heatmap.set('radius', heatmap.get('radius') ? null : 10);
+//}
+
+//function changeOpacity() {
+//	heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+//}
 
 // functions for markers
 function setMarkers(map) {
@@ -154,7 +170,7 @@ showMarkers()
   					</ul>
   				</li>
   				
-  				<!-- <li><a href ="#">Timeline</a></li> -->
+  				<li><a href ="#">Timeline</a></li>
   				
   			</ul>
   		
