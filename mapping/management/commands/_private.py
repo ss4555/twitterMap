@@ -25,6 +25,7 @@ class StdOutListener(StreamListener):
                                keywords=self.keyword,\
                                post_time=parser.parse(tt['created_at'])
                                )
+
                 tweet.save()#write data into database
         else:
             return False
