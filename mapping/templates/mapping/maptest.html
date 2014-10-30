@@ -40,8 +40,8 @@
 'rgba(255, 0, 0, 1)'
 
 	];
-
-var image = '/static/Twitter.png';
+{% load staticfiles %}
+var image = "{% static "mapping/twitter-bird-16x16.png" %}";
 var show_markers = false;
 var markers = [];
 var tweets = [
@@ -55,7 +55,7 @@ var tweets = [
 for (var j = 0; j < tweets.length; j++) {
   var marker = new google.maps.Marker({
       position: tweets[j],
-      map: map
+      map: map,
       icon: image
   });
   markers.push(marker);
